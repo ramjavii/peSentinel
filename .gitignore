@@ -86,3 +86,10 @@ reports/
 *.report.sig
 
 # YARA rule packs are vendored intentionally (tracked), so data/rules/ is NOT ignored
+
+# Development tooling (not part of the distributed package)
+MVP.md
+spec.md
+AGENTS.md
+opencode.json
+plan.md
