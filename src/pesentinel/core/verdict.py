@@ -45,3 +45,25 @@ class AggregatedVerdict:
             "signals": [r.to_dict() for r in self.signal_results],
             "bayes_pia": self.bayes_pia,
         }
+
+
+def bayes_pia(
+    p_i: float,
+    p_a_given_i: float,
+    p_a_given_not_i: float,
+) -> float:
+    """Bayes' theorem: P(I|A) from the text (Ch.15 §6.3).
+
+    P(I|A) = P(I) * P(A|I) / (P(I)*P(A|I) + P(~I)*P(A|~I))
+
+    - p_i: prior probability of intrusion P(I)
+    - p_a_given_i: true-alarm rate P(A|I)
+    - p_a_given_not_i: false-alarm rate P(A|~I)
+    """
+    if p_i <= 0:
+        return 0.0
+    numerator = p_i * p_a_given_i
+    denominator = numerator + (1 - p_i) * p_a_given_not_i
+    if denominator <= 0:
+        return 0.0
+    return numerator / denominator

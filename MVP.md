@@ -149,16 +149,16 @@ The signature-detection signal (Ch.15 §6.3) is added. The rule
 database is guarded by a Tripwire-style integrity checker (§6.4), and
 the Bayes false-alarm math is wired into reporting.
 
-- [ ] `signals/yara_signatures.py`: load + compile vendored rule packs with yara-python
-- [ ] Vendor a starter set of community YARA rules (awesome-yara / yara-forge subset)
-- [ ] Scan sample, collect matches, map to family + severity
-- [ ] `security/integrity.py`: Tripwire baseline DB (hash of rules + model + binary)
-- [ ] `security/integrity.py`: detect added / deleted / changed files vs baseline
-- [ ] `--init-baseline` CLI command to create the integrity DB
-- [ ] Integrity check runs before every scan; warns if rules tampered
-- [ ] Bayes P(I|A) computation in `core/verdict.py` from measured alarm rates
-- [ ] Report P(I|A) in the JSON + terminal output
-- [ ] Tests: YARA match on a synthetic rule, integrity tamper detection, Bayes math (Ex 15.15)
+- [x] `signals/yara_signatures.py`: load + compile vendored rule packs with yara-python
+- [x] Vendor a starter set of community YARA rules (awesome-yara / yara-forge subset)
+- [x] Scan sample, collect matches, map to family + severity
+- [x] `security/integrity.py`: Tripwire baseline DB (hash of rules + model + binary)
+- [x] `security/integrity.py`: detect added / deleted / changed files vs baseline
+- [x] `--init-baseline` CLI command to create the integrity DB
+- [x] Integrity check runs before every scan; warns if rules tampered
+- [x] Bayes P(I|A) computation in `core/verdict.py` from measured alarm rates
+- [x] Report P(I|A) in the JSON + terminal output
+- [x] Tests: YARA match on a synthetic rule, integrity tamper detection, Bayes math (Ex 15.15)
 
 ### Stage 5 — Scoring Engine + Firewall + Signed Reports
 Signals are combined into a final weighted verdict. Network egress is
@@ -208,7 +208,7 @@ every section of Ch.14/15 to the code that implements it.
 
 ## Current Stage
 
-Current Stage: 4 — YARA Signatures + Tripwire Integrity
+Current Stage: 5 — Scoring Engine + Firewall + Signed Reports
 
 ## Notes & Decisions
 

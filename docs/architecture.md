@@ -3,24 +3,40 @@
 > Auto-updated per the AGENTS.md rule. Append changes; do not rewrite
 > history. Each entry: date, summary, touched-files tree.
 
-## Current state (2026-06-19 — Stage 3 delivered)
+## Current state (2026-06-19 — Stage 4 delivered)
 
-Stages 1-3 complete: protection core + policy/audit/auth + PE heuristics.
-107 tests passing, ruff/mypy clean.
+Stages 1-4 complete: protection core + policy/audit/auth + PE
+heuristics + YARA signatures + Tripwire integrity + Bayes.
+121 tests passing, ruff/mypy clean.
 
 ```
   src/pesentinel/signals/
-    hash_reputation.py         # Stage 1
-    pe_heuristics.py           # Stage 3: entropy/packer/imports/imphash (§6.3 anomaly)
-    windows_model.py           # Stage 3: UAC/integrity/admin from PE manifest (§15.9)
+    yara_signatures.py        # Stage 4: YARA scan (§6.3 signature)
+  src/pesentinel/security/
+    integrity.py              # Stage 4: Tripwire baseline DB (§6.4)
+  src/pesentinel/core/
+    verdict.py                # + bayes_pia() function (§6.3)
+  data/rules/
+    test_marker.yar           # synthetic test rule
   tests/
-    ... (Stages 1-2)
-    test_pe_heuristics.py
-    test_windows_model.py
-    test_integration_stage3.py
+    test_integrity.py
+    test_yara_signatures.py
+    test_bayes.py
 ```
 
 ## Changelog
+
+### 2026-06-19 — Stage 4 delivered
+- `feat(signals)`: yara_signatures.py — compiles YARA rules from
+  data/rules/, scans sample, maps matches to verdict. The signature
+  half of Ch.15 §6.3.
+- `feat(security)`: integrity.py — Tripwire baseline DB (SHA-256
+  signatures), detects added/deleted/changed/shrinking files (§6.4).
+- `feat(core)`: bayes_pia() — Bayes' theorem P(I|A) computation
+  (§6.3). Includes textbook example and Ex 15.15 as tests.
+- `chore`: added yara-python dep. Synthetic test YARA rule vendored.
+- `test`: 121 tests (14 new), all green.
+- MVP Stage 4 checkboxes flipped to [x]; Current Stage -> 5.
 
 ### 2026-06-19 — Stage 3 delivered
 - `feat(signals)`: pe_heuristics.py — per-section entropy, packer
