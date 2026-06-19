@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import typer
@@ -54,8 +53,9 @@ def scan(
 ) -> None:
     """Analyze a single Windows PE sample."""
     console = Console()
+    console_err = Console(stderr=True)
     if not file.is_file():
-        console.print(f"[red]Error:[/red] file not found: {file}", file=sys.stderr)
+        console_err.print(f"[red]Error:[/red] file not found: {file}")
         raise typer.Exit(code=2)
 
     try:
@@ -68,7 +68,7 @@ def scan(
             _write_report(verdict, report)
             console.print(f"\n[dim]Report written to {report}[/dim]")
     except Exception as exc:
-        console.print(f"[red]Error:[/red] {exc}", file=sys.stderr)
+        console_err.print(f"[red]Error:[/red] {exc}")
         raise typer.Exit(code=1) from exc
 
 
@@ -83,10 +83,9 @@ def batch(
 ) -> None:
     """Batch-analyze all files in a directory."""
     console = Console()
+    console_err = Console(stderr=True)
     if not folder.is_dir():
-        console.print(
-            f"[red]Error:[/red] directory not found: {folder}", file=sys.stderr
-        )
+        console_err.print(f"[red]Error:[/red] directory not found: {folder}")
         raise typer.Exit(code=2)
 
     try:
@@ -117,7 +116,7 @@ def batch(
             _write_batch_report(verdicts, report)
             console.print(f"[dim]Batch report written to {report}[/dim]")
     except Exception as exc:
-        console.print(f"[red]Error:[/red] {exc}", file=sys.stderr)
+        console_err.print(f"[red]Error:[/red] {exc}")
         raise typer.Exit(code=1) from exc
 
 
