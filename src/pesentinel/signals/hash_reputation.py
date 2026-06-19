@@ -64,9 +64,23 @@ class HashReputationSignal:
         resp = requests.post(
             MALWAREBAZAAR_URL,
             data={"query": "get_info", "hash": digest},
+            headers={"User-Agent": "peSentinel/0.1.0"},
             timeout=_REQUEST_TIMEOUT,
         )
         payload = resp.json()
+
+        if "error" in payload:
+            return SignalResult(
+                signal_name=self.name,
+                verdict=Verdict.UNKNOWN,
+                confidence=0.0,
+                evidence=[f"sha256={digest}"],
+                reason=(
+                    f"MalwareBazaar API error: {payload['error']}"
+                    f" (HTTP {resp.status_code})"
+                ),
+            )
+
         status = payload.get("query_status", "")
         if status == "ok":
             data = payload.get("data", [])
