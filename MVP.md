@@ -117,16 +117,16 @@ The access matrix is driven by a policy file; privileged capabilities
 require authentication; every decision is audited. This is where
 Chapter 15's defenses begin wrapping the Chapter 14 kernel.
 
-- [ ] `security/policy.py`: load policy.yaml -> populate access matrix + RBAC roles
-- [ ] policy.yaml schema: objects, domains, rights, roles, thresholds, allow-listed hosts
-- [ ] `security/auth.py`: challenge-response H(pw, ch) + two-factor for admin ops
-- [ ] `security/auth.py`: S/Key code book generation and verification
-- [ ] Capability grant tied to successful authentication
-- [ ] `security/audit.py`: structured audit log of access decisions + auth events
-- [ ] Audit hooks in the protection core (every check -> audit record)
-- [ ] Anomaly hooks for strange-hour scans (audit flag)
-- [ ] Tests: policy load, auth success/failure, audit record contents
-- [ ] Integration test: privileged op fails without auth, succeeds with
+- [x] `security/policy.py`: load policy.yaml -> populate access matrix + RBAC roles
+- [x] policy.yaml schema: objects, domains, rights, roles, thresholds, allow-listed hosts
+- [x] `security/auth.py`: challenge-response H(pw, ch) + two-factor for admin ops
+- [x] `security/auth.py`: S/Key code book generation and verification
+- [x] Capability grant tied to successful authentication
+- [x] `security/audit.py`: structured audit log of access decisions + auth events
+- [x] Audit hooks in the protection core (every check -> audit record)
+- [x] Anomaly hooks for strange-hour scans (audit flag)
+- [x] Tests: policy load, auth success/failure, audit record contents
+- [x] Integration test: privileged op fails without auth, succeeds with
 
 ### Stage 3 — PE Heuristics + Windows Security-Model Reader
 The anomaly-detection signal (Ch.15 §6.3) is added, plus parsing of
@@ -208,7 +208,7 @@ every section of Ch.14/15 to the code that implements it.
 
 ## Current Stage
 
-Current Stage: 2 — Policy, Audit, Authentication
+Current Stage: 3 — PE Heuristics + Windows Security-Model Reader
 
 ## Notes & Decisions
 

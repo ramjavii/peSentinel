@@ -11,10 +11,14 @@ from pesentinel.core.pipeline import Pipeline
 from pesentinel.core.report import render_report
 from pesentinel.core.verdict import AggregatedVerdict
 from pesentinel.protection.kernel import ProtectionKernel
-from pesentinel.protection.types import Right
+from pesentinel.security.audit import JsonlAuditSink
+from pesentinel.security.policy import apply_policy, load_policy
 from pesentinel.signals.hash_reputation import HashReputationSignal
 
 app = typer.Typer(help="peSentinel — Windows-PE malware analyzer")
+
+_DEFAULT_POLICY = Path(__file__).resolve().parents[2] / "data" / "policy.yaml"
+_DEFAULT_AUDIT_LOG = Path("data") / "audit.jsonl"
 
 
 @app.command()
@@ -22,6 +26,9 @@ def scan(
     file: Path = typer.Option(..., "--file", "-f", help="Sample to analyze"),  # noqa: B008
     report: Path | None = typer.Option(None, "--report", help="Write JSON report"),  # noqa: B008
     offline: bool = typer.Option(False, "--offline", help="Skip network signals"),  # noqa: B008
+    policy: Path = typer.Option(  # noqa: B008
+        _DEFAULT_POLICY, "--policy", help="Path to policy.yaml"
+    ),
 ) -> None:
     """Analyze a single Windows PE sample."""
     console = Console()
@@ -30,11 +37,12 @@ def scan(
         raise typer.Exit(code=2)
 
     try:
-        kernel = ProtectionKernel()
+        audit_sink = JsonlAuditSink(_DEFAULT_AUDIT_LOG)
+        kernel = ProtectionKernel(audit=audit_sink)
         ProtectionKernel._instance = kernel
-        kernel.grant("hash_signal", "sample_file", Right.READ)
-        kernel.grant("hash_signal", "network", Right.NETWORK_CALL)
-        kernel.grant("pipeline_core", "sample_file", Right.READ)
+
+        pol = load_policy(policy)
+        apply_policy(kernel, pol)
 
         signal = HashReputationSignal(kernel, offline=offline)
         pipeline = Pipeline(kernel, [signal])

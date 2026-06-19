@@ -1,0 +1,64 @@
+# peSentinel policy — the living security document (Ch.15 §6.1)
+# Drives the access matrix, RBAC roles, scoring, firewall, auth, bayes.
+# Reviewed and updated periodically per §6.1.
+
+objects:
+  - sample_file
+  - rules_dir
+  - reports_dir
+  - network
+  - audit_log
+  - baseline_db
+  - model_file
+
+domains:
+  pipeline_core:
+    rights:
+      sample_file: [READ]
+      reports_dir: [WRITE]
+  hash_signal:
+    rights:
+      sample_file: [READ]
+      network: [NETWORK_CALL]
+  yara_signal:
+    rights:
+      sample_file: [READ]
+      rules_dir: [READ]
+  heuristic_signal:
+    rights:
+      sample_file: [READ]
+  reporter:
+    rights:
+      reports_dir: [WRITE]
+      audit_log: [WRITE]
+  admin:
+    rights:
+      rules_dir: [WRITE]
+      baseline_db: [WRITE]
+
+roles:
+  Scanner: [pipeline_core, hash_signal, yara_signal, heuristic_signal]
+  ReputationLookup: [hash_signal]
+  Reporter: [reporter]
+  Admin: [admin]
+
+scoring:
+  hash_reputation: 0.40
+  yara: 0.35
+  heuristics: 0.25
+  malicious_threshold: 0.60
+  suspicious_threshold: 0.30
+
+firewall:
+  allow:
+    - host: "mb-api.abuse.ch"
+      port: 443
+      scheme: https
+
+auth:
+  two_factor_for_admin: true
+  code_book_size: 100
+  max_attempts: 3
+
+bayes:
+  assumed_intrusion_rate: 0.00002
