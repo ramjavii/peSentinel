@@ -197,18 +197,18 @@ own security level per the DoD TCSEC.
 Polish, performance, and the chapter-mapping documentation that ties
 every section of Ch.14/15 to the code that implements it.
 
-- [ ] `--folder` batch scan with parallel signal execution
-- [ ] Progress reporting (Rich) for batch scans
-- [ ] Performance: cache compiled YARA rules, cache MalwareBazaar results per session
-- [ ] `docs/chapter_mapping.md`: cross-reference each Ch.14/15 section to source files
-- [ ] `docs/architecture.md`: final system tree + data flow
-- [ ] README.md with install + usage examples
-- [ ] `ruff` clean, `mypy` clean on protection core, `pytest` full green
+- [x] `--folder` batch scan with parallel signal execution
+- [x] Progress reporting (Rich) for batch scans
+- [x] Performance: cache compiled YARA rules, cache MalwareBazaar results per session
+- [x] `docs/chapter_mapping.md`: cross-reference each Ch.14/15 section to source files
+- [x] `docs/architecture.md`: final system tree + data flow
+- [x] README.md with install + usage examples
+- [x] `ruff` clean, `mypy` clean on protection core, `pytest` full green
 - [ ] Package build (`python -m build`) + version tag
 
 ## Current Stage
 
-Current Stage: 7 — Hardening, Batch Scan, Docs, Release
+Current Stage: Complete (Stages 1-7 delivered; package build pending)
 
 ## Notes & Decisions
 

@@ -64,7 +64,7 @@ def test_end_to_end_cli_writes_signed_report_schema(tmp_path: Path) -> None:
     sample.write_bytes(b"cli integration bytes")
     report = tmp_path / "report.json"
     result = runner.invoke(
-        app, ["--file", str(sample), "--offline", "--report", str(report)]
+        app, ["scan", "--file", str(sample), "--offline", "--report", str(report)]
     )
     assert result.exit_code == 0, result.output
     data = json.loads(report.read_text())

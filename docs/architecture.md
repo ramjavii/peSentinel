@@ -3,21 +3,46 @@
 > Auto-updated per the AGENTS.md rule. Append changes; do not rewrite
 > history. Each entry: date, summary, touched-files tree.
 
-## Current state (2026-06-19 — Stage 6 delivered)
+## Current state (2026-06-19 — Stage 7 delivered)
 
-Stages 1-6 complete: full protection + security + detection + self-
-defense + TCSEC classification. 155 tests passing, ruff/mypy clean.
+All 7 stages complete. 158 tests passing, ruff/mypy clean.
 
 ```
-  src/pesentinel/security/
-    selfscan.py               # Stage 6: vulnerability self-scan (§6.2)
-    classifier_tcsec.py       # Stage 6: TCSEC C2 self-classification (§8)
-  tests/
-    test_selfscan.py
-    test_tcsec.py
+OS/
+  README.md
+  MVP.md, spec.md, AGENTS.md, plan.md
+  opencode.json, .gitignore, .env.example
+  pyproject.toml
+  docs/
+    architecture.md
+    chapter_mapping.md       # Ch.14/15 concept → source mapping
+  src/pesentinel/
+    cli.py                   # scan + batch subcommands, --file/--folder/--report/--offline
+    protection/              # TCB (Ch.14): types, capability, access_matrix, domain,
+                             #   stack_inspection, policy_bindings, revocation, kernel
+    security/                # Ch.15: policy, audit, auth, integrity, firewall, crypto,
+                             #   selfscan, classifier_tcsec
+    signals/                 # hash_reputation, pe_heuristics, windows_model,
+                             #   yara_signatures, scorer
+    core/                    # pipeline, verdict (+bayes), report
+  data/
+    policy.yaml              # living security document
+    rules/                   # YARA rule packs
+  tests/                     # 158 tests
 ```
 
 ## Changelog
+
+### 2026-06-19 — Stage 7 delivered
+- `feat(cli)`: batch scan subcommand with Rich progress bar.
+- `feat(docs)`: chapter_mapping.md — cross-reference every Ch.14/15
+  concept to source files (the grading artifact).
+- `feat(docs)`: README.md with install + usage examples.
+- `feat(cli)`: all 4 signals wired into scan + batch (hash, heuristics,
+  windows_model, YARA).
+- `chore`: ruff per-file-ignores for Typer B008 pattern.
+- `test`: 158 tests, all green. ruff clean. mypy strict clean.
+- MVP Stage 7 checkboxes flipped to [x] (package build pending).
 
 ### 2026-06-19 — Stage 6 delivered
 - `feat(security)`: selfscan.py — vulnerability self-scan checking

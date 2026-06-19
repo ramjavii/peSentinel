@@ -20,7 +20,7 @@ def test_cli_loads_policy_and_scans(tmp_path: Path) -> None:
     orig = cli_mod._DEFAULT_AUDIT_LOG
     cli_mod._DEFAULT_AUDIT_LOG = audit_log
     try:
-        result = runner.invoke(app, ["--file", str(sample), "--offline"])
+        result = runner.invoke(app, ["scan", "--file", str(sample), "--offline"])
     finally:
         cli_mod._DEFAULT_AUDIT_LOG = orig
     assert result.exit_code == 0, result.output
@@ -55,7 +55,7 @@ def test_cli_custom_policy(tmp_path: Path) -> None:
     try:
         result = runner.invoke(
             app,
-            ["--file", str(sample), "--offline", "--policy", str(policy_file)],
+            ["scan", "--file", str(sample), "--offline", "--policy", str(policy_file)],
         )
     finally:
         cli_mod._DEFAULT_AUDIT_LOG = orig
