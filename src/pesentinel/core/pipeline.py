@@ -6,11 +6,11 @@ from typing import Protocol
 from pesentinel.core.verdict import AggregatedVerdict, SignalResult
 from pesentinel.protection.kernel import ProtectionKernel
 from pesentinel.protection.types import AccessControlException, Verdict
+from pesentinel.security.policy import PolicyConfig
+from pesentinel.signals.scorer import aggregate as scorer_aggregate
 
 
 class Signal(Protocol):
-    """Protocol every detection signal satisfies."""
-
     name: str
     domain: str
 
@@ -18,18 +18,12 @@ class Signal(Protocol):
 
 
 class Pipeline:
-    """Orchestrates detection signals through the protection kernel.
-
-    For each signal the pipeline switches to the signal's least-
-    privilege domain (Ch.14 §14.10 domain switching), runs the signal,
-    and collects its ``SignalResult``. Access-control denials are
-    EXPECTED control flow: they are caught and recorded as
-    ``UNKNOWN("denied")`` (AGENTS.md error-handling rules).
-    """
-
-    def __init__(self, kernel: ProtectionKernel, signals: list[Signal]) -> None:
+    def __init__(
+        self, kernel: ProtectionKernel, signals: list[Signal], policy: PolicyConfig
+    ) -> None:
         self._kernel = kernel
         self._signals = signals
+        self._policy = policy
 
     def run(self, path: Path) -> AggregatedVerdict:
         results: list[SignalResult] = []
@@ -54,28 +48,11 @@ class Pipeline:
                         reason=f"signal error: {exc}",
                     )
             results.append(result)
-        return self._aggregate(path, results)
 
-    def _aggregate(self, path: Path, results: list[SignalResult]) -> AggregatedVerdict:
-        final = Verdict.BENIGN
-        confidence = 0.0
-        for r in results:
-            if r.verdict == Verdict.MALICIOUS:
-                final = Verdict.MALICIOUS
-                confidence = max(confidence, r.confidence)
-            elif r.verdict == Verdict.SUSPICIOUS and final != Verdict.MALICIOUS:
-                final = Verdict.SUSPICIOUS
-                confidence = max(confidence, r.confidence)
         sha = ""
         for r in results:
             for e in r.evidence:
                 if e.startswith("sha256="):
                     sha = e.split("=", 1)[1]
                     break
-        return AggregatedVerdict(
-            final_verdict=final,
-            confidence=confidence,
-            signal_results=results,
-            sample_path=str(path),
-            sha256=sha,
-        )
+        return scorer_aggregate(results, self._policy, str(path), sha)

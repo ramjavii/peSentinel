@@ -5,8 +5,20 @@ from pathlib import Path
 from pesentinel.core.pipeline import Pipeline
 from pesentinel.protection.kernel import ProtectionKernel
 from pesentinel.protection.types import Right, Verdict
+from pesentinel.security.policy import AuthConfig, PolicyConfig, ScoringConfig
 from pesentinel.signals.pe_heuristics import PEHeuristicsSignal
 from pesentinel.signals.windows_model import WindowsModelSignal
+
+
+def _pol() -> PolicyConfig:
+    return PolicyConfig(
+        objects=[],
+        domains={},
+        roles={},
+        scoring=ScoringConfig(),
+        firewall_allow=[],
+        auth=AuthConfig(),
+    )
 
 
 def test_pipeline_runs_heuristics_and_windows_model(
@@ -16,7 +28,7 @@ def test_pipeline_runs_heuristics_and_windows_model(
     kernel.grant("pipeline_core", "sample_file", Right.READ)
     heur = PEHeuristicsSignal(kernel)
     wsm = WindowsModelSignal(kernel)
-    pipe = Pipeline(kernel, [heur, wsm])
+    pipe = Pipeline(kernel, [heur, wsm], _pol())
     v = pipe.run(benign_pe)
     assert len(v.signal_results) == 2
     names = {r.signal_name for r in v.signal_results}
@@ -27,6 +39,6 @@ def test_pipeline_non_pe_file(kernel: ProtectionKernel, non_pe_file: Path) -> No
     kernel.grant("heuristic_signal", "sample_file", Right.READ)
     kernel.grant("pipeline_core", "sample_file", Right.READ)
     heur = PEHeuristicsSignal(kernel)
-    pipe = Pipeline(kernel, [heur])
+    pipe = Pipeline(kernel, [heur], _pol())
     v = pipe.run(non_pe_file)
     assert v.signal_results[0].verdict == Verdict.UNKNOWN

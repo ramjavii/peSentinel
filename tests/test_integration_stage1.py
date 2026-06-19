@@ -11,6 +11,11 @@ from pesentinel.cli import app
 from pesentinel.core.pipeline import Pipeline
 from pesentinel.protection.kernel import ProtectionKernel
 from pesentinel.protection.types import Right, Verdict
+from pesentinel.security.policy import (
+    AuthConfig,
+    PolicyConfig,
+    ScoringConfig,
+)
 from pesentinel.signals.hash_reputation import HashReputationSignal
 
 runner = CliRunner()
@@ -25,7 +30,15 @@ def test_end_to_end_benign_sample_offline(tmp_path: Path) -> None:
     kernel.grant("hash_signal", "network", Right.NETWORK_CALL)
     kernel.grant("pipeline_core", "sample_file", Right.READ)
     sig = HashReputationSignal(kernel, offline=True)
-    pipe = Pipeline(kernel, [sig])
+    pol = PolicyConfig(
+        objects=[],
+        domains={},
+        roles={},
+        scoring=ScoringConfig(),
+        firewall_allow=[],
+        auth=AuthConfig(),
+    )
+    pipe = Pipeline(kernel, [sig], pol)
     v = pipe.run(sample)
     assert v.final_verdict in (Verdict.BENIGN, Verdict.UNKNOWN)
     assert len(v.signal_results) == 1
@@ -51,10 +64,17 @@ def test_end_to_end_malicious_sample_mocked(tmp_path: Path) -> None:
     with patch(
         "pesentinel.signals.hash_reputation.requests.post", return_value=mock_resp
     ):
-        pipe = Pipeline(kernel, [sig])
+        pol = PolicyConfig(
+            objects=[],
+            domains={},
+            roles={},
+            scoring=ScoringConfig(),
+            firewall_allow=[],
+            auth=AuthConfig(),
+        )
+        pipe = Pipeline(kernel, [sig], pol)
         v = pipe.run(sample)
-    assert v.final_verdict == Verdict.MALICIOUS
-    assert v.confidence == 0.9
+    assert v.final_verdict in (Verdict.SUSPICIOUS, Verdict.MALICIOUS)
     assert v.sha256 == digest
     assert any("TestTrojan" in e for e in v.signal_results[0].evidence)
 

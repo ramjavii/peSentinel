@@ -27,7 +27,7 @@ _DEFAULT_RULES_DIR = Path(__file__).resolve().parents[2] / "data" / "rules"
 
 def _build_kernel_and_signals(
     policy_path: Path, offline: bool
-) -> tuple[ProtectionKernel, list[object]]:
+) -> tuple[ProtectionKernel, list[object], object]:
     audit_sink = JsonlAuditSink(_DEFAULT_AUDIT_LOG)
     kernel = ProtectionKernel(audit=audit_sink)
     ProtectionKernel._instance = kernel
@@ -39,7 +39,7 @@ def _build_kernel_and_signals(
         WindowsModelSignal(kernel),
         YaraSignaturesSignal(kernel, _DEFAULT_RULES_DIR),
     ]
-    return kernel, signals
+    return kernel, signals, pol
 
 
 @app.command()
@@ -59,8 +59,8 @@ def scan(
         raise typer.Exit(code=2)
 
     try:
-        kernel, signals = _build_kernel_and_signals(policy, offline)
-        pipeline = Pipeline(kernel, signals)
+        kernel, signals, pol = _build_kernel_and_signals(policy, offline)
+        pipeline = Pipeline(kernel, signals, pol)
         verdict = pipeline.run(file)
         render_report(verdict, console)
 
@@ -89,8 +89,8 @@ def batch(
         raise typer.Exit(code=2)
 
     try:
-        kernel, signals = _build_kernel_and_signals(policy, offline)
-        pipeline = Pipeline(kernel, signals)
+        kernel, signals, pol = _build_kernel_and_signals(policy, offline)
+        pipeline = Pipeline(kernel, signals, pol)
         files = sorted(p for p in folder.iterdir() if p.is_file())
         verdicts: list[AggregatedVerdict] = []
 

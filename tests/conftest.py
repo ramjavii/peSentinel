@@ -9,6 +9,7 @@ from typing import Any
 import pytest
 
 from pesentinel.protection.kernel import ProtectionKernel
+from pesentinel.security.policy import AuthConfig, PolicyConfig, ScoringConfig
 
 
 @pytest.fixture(autouse=True)
@@ -64,6 +65,18 @@ def high_entropy_file(tmp_path: Path) -> Path:
 
 def sha256_of(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+@pytest.fixture
+def default_policy() -> PolicyConfig:
+    return PolicyConfig(
+        objects=[],
+        domains={},
+        roles={},
+        scoring=ScoringConfig(),
+        firewall_allow=[],
+        auth=AuthConfig(),
+    )
 
 
 def _make_minimal_pe(path: Path) -> Path:
