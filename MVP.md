@@ -97,20 +97,20 @@ The Chapter 14 access-control kernel is built first so every later
 signal is sandboxed from day one. A single detection signal (hash
 reputation via MalwareBazaar) exercises the kernel end-to-end.
 
-- [ ] Project scaffolding: pyproject.toml, src/pesentinel package layout, venv, ruff/pytest config
-- [ ] `protection/access_matrix.py`: AccessMatrix class (objects x domains x rights)
-- [ ] `protection/capability.py`: unforgeable Capability objects, kernel-only minting
-- [ ] `protection/domain.py`: Domain class, domain switching, active-domain tracking
-- [ ] `protection/stack_inspection.py`: doPrivileged annotation + call-stack walk
-- [ ] `protection/policy_bindings.py`: @requires_capability decorator (declarative protection)
-- [ ] `protection/revocation.py`: runtime revoke + ref-counted object deletion
-- [ ] `signals/hash_reputation.py`: SHA-256 + MalwareBazaar query, runs in a least-priv domain
-- [ ] `core/pipeline.py`: orchestrate domain switch -> signal -> collect verdict
-- [ ] `core/verdict.py`: minimal verdict struct (benign/suspicious/malicious + evidence)
-- [ ] `core/report.py`: Rich terminal report for a single signal
-- [ ] `cli.py`: Typer entrypoint with --file flag
-- [ ] Unit tests for every protection-core module
-- [ ] Integration test: scan a benign sample through the full pipeline
+- [x] Project scaffolding: pyproject.toml, src/pesentinel package layout, venv, ruff/pytest config
+- [x] `protection/access_matrix.py`: AccessMatrix class (objects x domains x rights)
+- [x] `protection/capability.py`: unforgeable Capability objects, kernel-only minting
+- [x] `protection/domain.py`: Domain class, domain switching, active-domain tracking
+- [x] `protection/stack_inspection.py`: doPrivileged annotation + call-stack walk
+- [x] `protection/policy_bindings.py`: @requires_capability decorator (declarative protection)
+- [x] `protection/revocation.py`: runtime revoke + ref-counted object deletion
+- [x] `signals/hash_reputation.py`: SHA-256 + MalwareBazaar query, runs in a least-priv domain
+- [x] `core/pipeline.py`: orchestrate domain switch -> signal -> collect verdict
+- [x] `core/verdict.py`: minimal verdict struct (benign/suspicious/malicious + evidence)
+- [x] `core/report.py`: Rich terminal report for a single signal
+- [x] `cli.py`: Typer entrypoint with --file flag
+- [x] Unit tests for every protection-core module
+- [x] Integration test: scan a benign sample through the full pipeline
 
 ### Stage 2 — Policy, Audit, Authentication
 The access matrix is driven by a policy file; privileged capabilities
@@ -208,7 +208,7 @@ every section of Ch.14/15 to the code that implements it.
 
 ## Current Stage
 
-Current Stage: 1 — Protection Core + Hash Reputation Signal
+Current Stage: 2 — Policy, Audit, Authentication
 
 ## Notes & Decisions
 
