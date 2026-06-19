@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+sc0pe_venv/
+
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+data/keys/
+
+# Testing / coverage
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Build / packaging
+*.whl
+*.tar.gz
+pip-wheel-metadata/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thales.T*
+*.sublime-*
+
+# OS noise
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# peSentinel runtime artifacts (generated, not source)
+data/baseline.db
+data/baseline.db.lock
+data/audit.jsonl
+data/audit.jsonl.lock
+reports/
+*.report.json
+*.report.sig
+
+# YARA rule packs are vendored intentionally (tracked), so data/rules/ is NOT ignored
