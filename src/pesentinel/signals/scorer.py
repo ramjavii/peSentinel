@@ -49,11 +49,15 @@ def aggregate(
         final = Verdict.BENIGN
 
     # Floor: strong signals shouldn't be drowned out by conservative
-    # weights. 2+ malicious -> malicious; 1 malicious or any suspicious
+    # weights. 2+ malicious -> malicious; 1 malicious with high
+    # confidence (>=0.9) -> malicious; 1 malicious or any suspicious
     # -> at least suspicious.
     mal_count = sum(1 for r in results if r.verdict == Verdict.MALICIOUS)
     susp_count = sum(1 for r in results if r.verdict == Verdict.SUSPICIOUS)
-    if mal_count >= 2:
+    high_conf_mal = any(
+        r.verdict == Verdict.MALICIOUS and r.confidence >= 0.9 for r in results
+    )
+    if mal_count >= 2 or high_conf_mal:
         final = Verdict.MALICIOUS
     elif (mal_count >= 1 or susp_count >= 1) and final == Verdict.BENIGN:
         final = Verdict.SUSPICIOUS

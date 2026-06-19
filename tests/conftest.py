@@ -20,6 +20,12 @@ def reset_kernel() -> Any:
     ProtectionKernel.reset_instance()
 
 
+@pytest.fixture(autouse=True)
+def clear_vt_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Ensure tests never hit the real VirusTotal API."""
+    monkeypatch.delenv("VIRUSTOTAL_API_KEY", raising=False)
+
+
 @pytest.fixture
 def kernel() -> ProtectionKernel:
     k = ProtectionKernel()

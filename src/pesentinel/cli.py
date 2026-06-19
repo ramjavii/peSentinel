@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 import typer
+from dotenv import load_dotenv
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 
@@ -19,6 +20,8 @@ from pesentinel.signals.windows_model import WindowsModelSignal
 from pesentinel.signals.yara_signatures import YaraSignaturesSignal
 
 app = typer.Typer(help="peSentinel — Windows-PE malware analyzer")
+
+load_dotenv()
 
 _DEFAULT_POLICY = Path(__file__).resolve().parents[2] / "data" / "policy.yaml"
 _DEFAULT_AUDIT_LOG = Path("data") / "audit.jsonl"
