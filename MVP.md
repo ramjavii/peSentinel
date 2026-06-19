@@ -132,17 +132,17 @@ Chapter 15's defenses begin wrapping the Chapter 14 kernel.
 The anomaly-detection signal (Ch.15 §6.3) is added, plus parsing of
 the exact Windows security objects described in §15.9.
 
-- [ ] `signals/pe_heuristics.py`: parse PE with pefile/lief
-- [ ] Per-section entropy computation + high-entropy flag
-- [ ] Packer detection (UPX and common packers via section names + entropy)
-- [ ] Suspicious Win32 import detection (injection/crypto/networking API sets)
-- [ ] imphash computation + anomaly flag
-- [ ] Section-name anomaly detection
-- [ ] `signals/windows_model.py`: read PE manifest for requestedExecutionLevel (UAC)
-- [ ] `signals/windows_model.py`: extract integrity level, admin requirement
-- [ ] Surface UAC/integrity/admin in the verdict report
-- [ ] Tests: benign PE vs packed PE vs high-import-suspicion PE (fixture hashes, no real samples)
-- [ ] Integration test: heuristics signal runs in its own least-priv domain
+- [x] `signals/pe_heuristics.py`: parse PE with pefile/lief
+- [x] Per-section entropy computation + high-entropy flag
+- [x] Packer detection (UPX and common packers via section names + entropy)
+- [x] Suspicious Win32 import detection (injection/crypto/networking API sets)
+- [x] imphash computation + anomaly flag
+- [x] Section-name anomaly detection
+- [x] `signals/windows_model.py`: read PE manifest for requestedExecutionLevel (UAC)
+- [x] `signals/windows_model.py`: extract integrity level, admin requirement
+- [x] Surface UAC/integrity/admin in the verdict report
+- [x] Tests: benign PE vs packed PE vs high-import-suspicion PE (fixture hashes, no real samples)
+- [x] Integration test: heuristics signal runs in its own least-priv domain
 
 ### Stage 4 — YARA Signatures + Tripwire Integrity
 The signature-detection signal (Ch.15 §6.3) is added. The rule
@@ -208,7 +208,7 @@ every section of Ch.14/15 to the code that implements it.
 
 ## Current Stage
 
-Current Stage: 3 — PE Heuristics + Windows Security-Model Reader
+Current Stage: 4 — YARA Signatures + Tripwire Integrity
 
 ## Notes & Decisions
 

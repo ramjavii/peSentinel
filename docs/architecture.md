@@ -3,31 +3,36 @@
 > Auto-updated per the AGENTS.md rule. Append changes; do not rewrite
 > history. Each entry: date, summary, touched-files tree.
 
-## Current state (2026-06-19 — Stage 2 delivered)
+## Current state (2026-06-19 — Stage 3 delivered)
 
-Stages 1-2 complete: protection core + policy/audit/auth.
-96 tests passing, ruff/mypy clean.
+Stages 1-3 complete: protection core + policy/audit/auth + PE heuristics.
+107 tests passing, ruff/mypy clean.
 
 ```
-OS/
-  ... (Stage 1 files unchanged)
-  data/
-    policy.yaml               # the living security document (§6.1)
-    rules/                    # (empty; YARA rules arrive in Stage 4)
-  src/pesentinel/security/    # Ch.15 defenses (imports protection/, not vice versa)
-    __init__.py
-    policy.py                 # load_policy + apply_policy + RBAC roles (§6.1)
-    audit.py                  # JsonlAuditSink + is_strange_hour (§6.5)
-    auth.py                   # challenge-response + CodeBook + AuthService (§5.4)
+  src/pesentinel/signals/
+    hash_reputation.py         # Stage 1
+    pe_heuristics.py           # Stage 3: entropy/packer/imports/imphash (§6.3 anomaly)
+    windows_model.py           # Stage 3: UAC/integrity/admin from PE manifest (§15.9)
   tests/
-    ... (Stage 1 tests)
-    test_policy.py
-    test_audit.py
-    test_auth.py
-    test_integration_stage2.py
+    ... (Stages 1-2)
+    test_pe_heuristics.py
+    test_windows_model.py
+    test_integration_stage3.py
 ```
 
 ## Changelog
+
+### 2026-06-19 — Stage 3 delivered
+- `feat(signals)`: pe_heuristics.py — per-section entropy, packer
+  detection (UPX), suspicious Win32 imports (injection/crypto/
+  networking/anti-analysis), imphash, section-name anomalies. The
+  anomaly-detection half of Ch.15 §6.3.
+- `feat(signals)`: windows_model.py — reads PE manifest for UAC
+  requestedExecutionLevel, integrity level, admin requirement, DLL
+  hardening flags. Implements §15.9 (the Windows security model).
+- `chore`: added pefile + lief deps.
+- `test`: 107 tests (11 new), all green. Synthetic PE fixture.
+- MVP Stage 3 checkboxes flipped to [x]; Current Stage -> 4.
 
 ### 2026-06-19 — Stage 2 delivered
 - `feat(security)`: policy.py (load + apply policy.yaml to access
