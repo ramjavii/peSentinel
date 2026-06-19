@@ -3,24 +3,32 @@
 > Auto-updated per the AGENTS.md rule. Append changes; do not rewrite
 > history. Each entry: date, summary, touched-files tree.
 
-## Current state (2026-06-19 — Stage 5 delivered)
+## Current state (2026-06-19 — Stage 6 delivered)
 
-Stages 1-5 complete: full detection pipeline + scoring + firewall +
-crypto. 144 tests passing, ruff/mypy clean.
+Stages 1-6 complete: full protection + security + detection + self-
+defense + TCSEC classification. 155 tests passing, ruff/mypy clean.
 
 ```
-  src/pesentinel/signals/
-    scorer.py                 # Stage 5: weighted aggregation (§9.1)
   src/pesentinel/security/
-    firewall.py               # Stage 5: egress allow-list + proxy (§7)
-    crypto.py                 # Stage 5: HMAC + Ed25519 + salted hash (§10)
+    selfscan.py               # Stage 6: vulnerability self-scan (§6.2)
+    classifier_tcsec.py       # Stage 6: TCSEC C2 self-classification (§8)
   tests/
-    test_scorer.py
-    test_firewall.py
-    test_crypto.py
+    test_selfscan.py
+    test_tcsec.py
 ```
 
 ## Changelog
+
+### 2026-06-19 — Stage 6 delivered
+- `feat(security)`: selfscan.py — vulnerability self-scan checking
+  setuid binaries, world-writable dirs, PATH dangers, checksum
+  changes (reuses integrity.py). Implements Ch.15 §6.2 checklist.
+- `feat(security)`: classifier_tcsec.py — TCSEC self-classification
+  targeting C2. Documents TCB = protection core. Verifies C2
+  requirements: individual ACL, selective audit, TCB self-protection,
+  object reuse. Ch.15 §8.
+- `test`: 155 tests (11 new), all green.
+- MVP Stage 6 checkboxes flipped to [x]; Current Stage -> 7.
 
 ### 2026-06-19 — Stage 5 delivered
 - `feat(signals)`: scorer.py — weighted aggregation of signal outputs

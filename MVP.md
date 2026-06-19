@@ -181,17 +181,17 @@ firewalled. Reports are cryptographically signed.
 peSentinel turns its defenses on itself, and formally classifies its
 own security level per the DoD TCSEC.
 
-- [ ] `security/selfscan.py`: scan own install for the §6.2 checklist
-- [ ] Detect setuid binaries in the install path
-- [ ] Check directory permissions on data/, src/, config
-- [ ] Check PATH for dangerous entries
-- [ ] Detect checksum changes to shipped rules (reuses integrity.py)
-- [ ] Detect unexpected network listeners
-- [ ] `--selfscan` CLI command, report findings + auto-fix where safe
-- [ ] `security/classifier_tcsec.py`: evaluate self against TCSEC divisions
-- [ ] Document TCB = protection core; target C2 (individual ACL + audit + object reuse)
-- [ ] TCSEC classification report in docs/
-- [ ] Tests: selfscan flags a planted setuid file + a planted world-writable dir
+- [x] `security/selfscan.py`: scan own install for the §6.2 checklist
+- [x] Detect setuid binaries in the install path
+- [x] Check directory permissions on data/, src/, config
+- [x] Check PATH for dangerous entries
+- [x] Detect checksum changes to shipped rules (reuses integrity.py)
+- [x] Detect unexpected network listeners
+- [x] `--selfscan` CLI command, report findings + auto-fix where safe
+- [x] `security/classifier_tcsec.py`: evaluate self against TCSEC divisions
+- [x] Document TCB = protection core; target C2 (individual ACL + audit + object reuse)
+- [x] TCSEC classification report in docs/
+- [x] Tests: selfscan flags a planted setuid file + a planted world-writable dir
 
 ### Stage 7 — Hardening, Batch Scan, Docs, Release
 Polish, performance, and the chapter-mapping documentation that ties
@@ -208,7 +208,7 @@ every section of Ch.14/15 to the code that implements it.
 
 ## Current Stage
 
-Current Stage: 6 — Vulnerability Self-Scan + TCSEC Classification
+Current Stage: 7 — Hardening, Batch Scan, Docs, Release
 
 ## Notes & Decisions
 
