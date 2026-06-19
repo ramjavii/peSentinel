@@ -3,28 +3,35 @@
 > Auto-updated per the AGENTS.md rule. Append changes; do not rewrite
 > history. Each entry: date, summary, touched-files tree.
 
-## Current state (2026-06-19 — Stage 4 delivered)
+## Current state (2026-06-19 — Stage 5 delivered)
 
-Stages 1-4 complete: protection core + policy/audit/auth + PE
-heuristics + YARA signatures + Tripwire integrity + Bayes.
-121 tests passing, ruff/mypy clean.
+Stages 1-5 complete: full detection pipeline + scoring + firewall +
+crypto. 144 tests passing, ruff/mypy clean.
 
 ```
   src/pesentinel/signals/
-    yara_signatures.py        # Stage 4: YARA scan (§6.3 signature)
+    scorer.py                 # Stage 5: weighted aggregation (§9.1)
   src/pesentinel/security/
-    integrity.py              # Stage 4: Tripwire baseline DB (§6.4)
-  src/pesentinel/core/
-    verdict.py                # + bayes_pia() function (§6.3)
-  data/rules/
-    test_marker.yar           # synthetic test rule
+    firewall.py               # Stage 5: egress allow-list + proxy (§7)
+    crypto.py                 # Stage 5: HMAC + Ed25519 + salted hash (§10)
   tests/
-    test_integrity.py
-    test_yara_signatures.py
-    test_bayes.py
+    test_scorer.py
+    test_firewall.py
+    test_crypto.py
 ```
 
 ## Changelog
+
+### 2026-06-19 — Stage 5 delivered
+- `feat(signals)`: scorer.py — weighted aggregation of signal outputs
+  with floor logic (2+ malicious -> malicious; 1 malicious or any
+  suspicious -> at least suspicious). Weights from policy.yaml (§9.1).
+- `feat(security)`: firewall.py — egress allow-list (host/port/scheme),
+  application-proxy response validation (§7).
+- `feat(security)`: crypto.py — HMAC-SHA256 report signing, Ed25519
+  asymmetric signing, PBKDF2 salted credential hashing (§10, Ex 15.3/4).
+- `test`: 144 tests (23 new), all green.
+- MVP Stage 5 checkboxes flipped to [x]; Current Stage -> 6.
 
 ### 2026-06-19 — Stage 4 delivered
 - `feat(signals)`: yara_signatures.py — compiles YARA rules from

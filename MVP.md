@@ -164,18 +164,18 @@ the Bayes false-alarm math is wired into reporting.
 Signals are combined into a final weighted verdict. Network egress is
 firewalled. Reports are cryptographically signed.
 
-- [ ] `signals/scorer.py`: weighted aggregation of all signal outputs -> final verdict
-- [ ] Scoring weights defined in policy.yaml (tunable)
-- [ ] Confidence score from agreement/disagreement of signals
-- [ ] `security/firewall.py`: egress allow-list (MalwareBazaar host/port only)
-- [ ] `security/firewall.py`: application-proxy-style HTTP response inspection
-- [ ] DMZ-style domain isolation for untrusted samples
-- [ ] NETWORK_CALL capability enforced through the firewall
-- [ ] `security/crypto.py`: HMAC-SHA256 signing of JSON reports
-- [ ] `security/crypto.py`: optional asymmetric signing (Ed25519)
-- [ ] `security/crypto.py`: salted hashing of stored credentials (Ex 15.3/15.4)
-- [ ] `--verify-report` CLI command to validate a signed report
-- [ ] Tests: firewall blocks disallowed host, signed report verifies, tampered report fails
+- [x] `signals/scorer.py`: weighted aggregation of all signal outputs -> final verdict
+- [x] Scoring weights defined in policy.yaml (tunable)
+- [x] Confidence score from agreement/disagreement of signals
+- [x] `security/firewall.py`: egress allow-list (MalwareBazaar host/port only)
+- [x] `security/firewall.py`: application-proxy-style HTTP response inspection
+- [x] DMZ-style domain isolation for untrusted samples
+- [x] NETWORK_CALL capability enforced through the firewall
+- [x] `security/crypto.py`: HMAC-SHA256 signing of JSON reports
+- [x] `security/crypto.py`: optional asymmetric signing (Ed25519)
+- [x] `security/crypto.py`: salted hashing of stored credentials (Ex 15.3/15.4)
+- [x] `--verify-report` CLI command to validate a signed report
+- [x] Tests: firewall blocks disallowed host, signed report verifies, tampered report fails
 
 ### Stage 6 — Vulnerability Self-Scan + TCSEC Classification
 peSentinel turns its defenses on itself, and formally classifies its
@@ -208,7 +208,7 @@ every section of Ch.14/15 to the code that implements it.
 
 ## Current Stage
 
-Current Stage: 5 — Scoring Engine + Firewall + Signed Reports
+Current Stage: 6 — Vulnerability Self-Scan + TCSEC Classification
 
 ## Notes & Decisions
 
